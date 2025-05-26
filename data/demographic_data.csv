@@ -1,5 +1,6 @@
 timestamp,name,age,occupation,familiarity
-2025-05-25 01:49:14,a,0,a,0
-2025-05-25 01:52:35,a,0,a,0
-2025-05-25 01:52:37,,0,a,0
-2025-05-25 01:57:17,a,6,a,0
+2025-05-25 12:45:27,Adam,35,Usability Tester,Very Familiar
+2025-05-25 12:46:01,Bob,20,Student,Never Used
+2025-05-25 12:46:23,Casey,44,Engineer,Neutral
+2025-05-25 12:46:41,Jason,35,Engineer,Neutral
+2025-05-25 12:46:58,Robin,30,Cook,Not As Familiar

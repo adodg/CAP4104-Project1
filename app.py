@@ -1,5 +1,6 @@
 import datetime
 
+import altair as alt
 import streamlit as st
 import pandas as pd
 import time
@@ -80,10 +81,7 @@ def main():
         name = st.text_input("What is your name?")
         dob = st.date_input("When were you born?", min_value="1900-01-01", max_value="today")
         occupation = st.text_input("What do you do for a living?")
-
-        display = ("Very Familiar", "Familiar", "Neutral", "Not As Familiar", "Never Used One")
-        options = list(range(len(display)))
-        familiarity = st.selectbox("How familiar are you  with Usability Testing Tools", options, format_func=lambda x: display[x])
+        familiarity = st.selectbox("How familiar are you  with Usability Testing Tools", ("Very Familiar", "Familiar", "Neutral", "Not As Familiar", "Never Used"))
 
         with st.form("demographic_form"):
             # TODO: Create the demographic form
@@ -182,6 +180,48 @@ def main():
         demographic_df = load_from_csv(DEMOGRAPHIC_CSV)
         if not demographic_df.empty:
             st.dataframe(demographic_df)
+
+
+            age_bins = [0, 17, 36, 55, 100] # Leave our upper bin at 100... unless we are doing Usability Testing with centenarians
+            age_labels = ["0–17", "18–36", "37–55", "56+"]
+            demographic_df["age_bracket"] = pd.cut(
+                demographic_df["age"],
+                bins=age_bins,
+                labels=age_labels,
+                include_lowest=True,
+            )
+
+            fam_order = ["Never Used", "Not As Familiar", "Neutral", "Familiar", "Very Familiar"]
+
+            age_bracket_chart = (
+                alt.Chart(demographic_df)
+                .mark_bar()
+                .encode(
+                    x=alt.X("age_bracket:N", title="Age Bracket"),
+                    y=alt.Y(
+                        "count()",
+                        title="Number of Participants",
+                        axis=alt.Axis(format="d", tickMinStep=1)
+                    )
+                )
+                .properties(title="Participants by Age Bracket")
+            )
+            st.altair_chart(age_bracket_chart, use_container_width=True)
+
+            fam_chart = (
+                alt.Chart(demographic_df)
+                .mark_bar()
+                .encode(
+                    x=alt.X("familiarity:N", sort=fam_order, title="Familiarity"),
+                    y=alt.Y(
+                        "count()",
+                        title="Count",
+                        axis=alt.Axis(format="d", tickMinStep=1)
+                    )
+                )
+                .properties(title="Familiarity with Usability Testing Tools")
+            )
+            st.altair_chart(fam_chart, use_container_width=True)
         else:
             st.info("No demographic data available yet.")
 
@@ -204,10 +244,8 @@ def main():
         if not demographic_df.empty:
             st.subheader("Demographic Questionnaire Averages")
             avg_participant_age = demographic_df["age"].mean()
-            avg_familiarity = demographic_df["familiarity"].mean()
 
             st.write(f"**Average Participant Age:** {avg_participant_age:.0f}")
-            st.write(f"**Average Familiarity:** {avg_familiarity:.2f}")
 
         # Example of aggregated stats (for demonstration only)
         if not exit_df.empty:

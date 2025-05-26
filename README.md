@@ -28,7 +28,7 @@
 3. **Install dependencies**
 
    ```bash
-   pip install streamlit pandas
+   pip install streamlit pandas altair
    ```
 
 ## Running the App
