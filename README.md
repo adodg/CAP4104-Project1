@@ -5,6 +5,7 @@
 * Python 3.8 or higher
 * [Streamlit](https://streamlit.io/)
 * [Pandas](https://pandas.pydata.org/)
+* [Altair](https://altair-viz.github.io/)
 
 ## Installation
 
